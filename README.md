@@ -128,6 +128,7 @@ backend como el frontend. Asegúrate de seguir estos pasos para que el proyecto 
     - También puedes acceder a la documentación de la API si se configuró Swagger u OpenAPI en:
       ```plaintext
       http://localhost:8080/swagger-ui.html
+      http://localhost:8080/docs/swagger-ui.html
       ```
 
 Con estos pasos, el backend se ejecutará y utilizará Docker para la base de datos MySQL, configurada según el archivo
