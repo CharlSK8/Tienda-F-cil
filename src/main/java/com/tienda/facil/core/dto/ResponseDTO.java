@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseDTO<T>  {
+public class ResponseDTO<T> {
     private transient T response;
     private String message;
     private int code;
