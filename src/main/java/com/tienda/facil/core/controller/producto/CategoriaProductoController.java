@@ -9,12 +9,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.Collectors;
 
 /**
  * Controlador REST para la gestión de categorías de productos.
@@ -26,6 +22,11 @@ import java.util.stream.Collectors;
 public class CategoriaProductoController {
     private final CategoriaProductoService categoriaProductoService;
 
+    /**
+     * Constructor del controlador que inyecta el servicio de categoría de producto.
+     *
+     * @param categoriaProductoService Servicio para la gestión de categorías de productos.
+     */
     public CategoriaProductoController(CategoriaProductoService categoriaProductoService) {
         this.categoriaProductoService = categoriaProductoService;
     }

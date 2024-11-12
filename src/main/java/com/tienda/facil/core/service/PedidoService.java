@@ -19,8 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.*;
-
 /**
  * Servicio para la gestión de pedidos.
  */
@@ -52,12 +50,10 @@ public class PedidoService {
      * @return {@link ResponseDTO} con el pedido creado o un mensaje de error.
      */
     public ResponseDTO crearPedido(@Valid PedidoDto pedidoDto, BindingResult bindingResult) {
-        // Validar datos del DTO
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldErrors().stream()
                     .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                    .collect(joining(", "));
-
+                    .collect(Collectors.joining(", "));
             return ResponseDTO.builder()
                     .response(errorMessage)
                     .code(HttpStatus.BAD_REQUEST.value())
@@ -65,36 +61,32 @@ public class PedidoService {
         }
 
         try {
-            // Validar cliente
             ClienteModel cliente = clienteRepository.findById(pedidoDto.getClienteId())
                     .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado"));
 
-            // Validar prioridad
             PrioridadModel prioridad = prioridadRepository.findById(pedidoDto.getPrioridadId())
                     .orElseThrow(() -> new IllegalArgumentException("Prioridad no encontrada"));
 
-            // Mapear PedidoDto a PedidoModel
             PedidoModel pedidoModel = getPedidoModel(pedidoDto, cliente, prioridad);
 
-            // Guardar el pedido en la base de datos llamando al Repository
             PedidoModel nuevoPedido = pedidoRepository.save(pedidoModel);
 
-            // Construir y devolver respuesta exitosa
+            // Convertimos el modelo a DTO para evitar problemas de serialización
+            PedidoDto nuevoPedidoDto = convertToDto(nuevoPedido);
+
             return ResponseDTO.builder()
-                    .response(nuevoPedido)
+                    .response(nuevoPedidoDto) // Devolvemos el DTO en lugar del modelo JPA
                     .code(HttpStatus.CREATED.value())
-                    .message("Pedido creado exitosamente ")
+                    .message("Pedido creado exitosamente")
                     .build();
 
         } catch (IllegalArgumentException e) {
-            // Manejo de error en caso de cliente o prioridad no encontrados
             return ResponseDTO.builder()
                     .message(e.getMessage())
                     .code(HttpStatus.BAD_REQUEST.value())
                     .build();
 
         } catch (Exception e) {
-            // Manejo de cualquier otro error inesperado
             return ResponseDTO.builder()
                     .message("Error inesperado: " + e.getMessage())
                     .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
@@ -269,5 +261,4 @@ public class PedidoService {
                     .build();
         }
     }
-
 }
