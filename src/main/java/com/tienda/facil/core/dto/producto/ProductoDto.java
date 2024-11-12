@@ -2,6 +2,8 @@ package com.tienda.facil.core.dto.producto;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class ProductoDto {
     private Long id;

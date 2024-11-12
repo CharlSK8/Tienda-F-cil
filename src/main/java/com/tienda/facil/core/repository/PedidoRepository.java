@@ -4,6 +4,7 @@ import com.tienda.facil.core.model.ClienteModel;
 import com.tienda.facil.core.model.PedidoModel;
 import com.tienda.facil.core.model.PrioridadModel;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
  * Repositorio para la entidad PedidoModel.
  * Extiende JpaRepository para proporcionar métodos CRUD básicos.
  */
+@Repository
 public interface PedidoRepository extends JpaRepository<PedidoModel, Long> {
 
     /*

@@ -3,6 +3,7 @@ package com.tienda.facil.core.repository;
 import com.tienda.facil.core.model.PrioridadModel;
 import com.tienda.facil.core.utils.enums.PrioridadPedido;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ import java.util.Optional;
  * Repositorio para la entidad PrioridadModel.
  * Proporciona métodos para realizar operaciones CRUD en la base de datos.
  */
+@Repository
 public interface PrioridadRepository extends JpaRepository<PrioridadModel, Long> {
 
     /**

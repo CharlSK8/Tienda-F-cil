@@ -1,5 +1,6 @@
 package com.tienda.facil.core.utils.enums;
 
+
 public enum CategoriaProducto {
     ELECTRODOMESTICOS,
     ROPA,
@@ -15,5 +16,6 @@ public enum CategoriaProducto {
     AUTOMOVILES,
     MUEBLES,
     JOYERIA,
-    OTROS
+    OTROS;
+
 }
