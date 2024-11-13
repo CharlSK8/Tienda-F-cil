@@ -1,9 +1,11 @@
 package com.tienda.facil.core.repository;
 
 import com.tienda.facil.core.model.ClienteModel;
+import com.tienda.facil.core.utils.enums.EstadoActivo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,4 +23,6 @@ public interface ClienteRepository extends JpaRepository<ClienteModel, Long> {
      */
     Optional<ClienteModel> findByEmail(String email);  // Método personalizado
 
+    // Buscar clientes activos
+    List<ClienteModel> findByActivo(EstadoActivo activo);
 }

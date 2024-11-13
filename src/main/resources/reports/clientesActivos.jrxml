@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="clientesActivos"
+              pageWidth="595"
+              pageHeight="842"
+              columnWidth="535"
+              leftMargin="30"
+              rightMargin="30"
+              topMargin="20"
+              bottomMargin="20"
+              uuid="f8e7ecb2-7b17-4c3c-a15b-3f5b7811e9b8">
+
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+
+    <!-- Parámetros -->
+    <parameter name="ReportTitle" class="java.lang.String"/>
+
+    <!-- Fields -->
+    <field name="id" class="java.lang.Long"/>
+    <field name="nombre" class="java.lang.String"/>
+    <field name="segundoNombre" class="java.lang.String"/>
+    <field name="apellido" class="java.lang.String"/>
+    <field name="segundoApellido" class="java.lang.String"/>
+    <field name="telefono" class="java.lang.String"/>
+    <field name="email" class="java.lang.String"/>
+    <field name="fechaRegistro" class="java.util.Date"/>
+    <field name="activo" class="java.lang.String"/>
+
+    <!-- Title -->
+    <title>
+        <band height="50">
+            <textField>
+                <reportElement x="0" y="0" width="535" height="50" uuid="e088a33c-98e4-4b6d-8442-1b64ca7f2c84"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="18" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{ReportTitle}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <!-- Column Header -->
+    <columnHeader>
+        <band height="30">
+            <staticText>
+                <reportElement x="0" y="0" width="80" height="30" uuid="c5b3c4c1-5068-4f01-9492-985f1e2957c7"/>
+                <textElement textAlignment="Center">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[ID]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="80" y="0" width="100" height="30" uuid="c5b3c4c1-5068-4f01-9492-985f1e2957c8"/>
+                <textElement textAlignment="Center">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[Nombre]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="180" y="0" width="100" height="30" uuid="c5b3c4c1-5068-4f01-9492-985f1e2957c9"/>
+                <textElement textAlignment="Center">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[Apellido]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="280" y="0" width="80" height="30" uuid="c5b3c4c1-5068-4f01-9492-985f1e2957d0"/>
+                <textElement textAlignment="Center">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[Teléfono]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="360" y="0" width="175" height="30" uuid="c5b3c4c1-5068-4f01-9492-985f1e2957d1"/>
+                <textElement textAlignment="Center">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[Email]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <!-- Detail -->
+    <detail>
+        <band height="30">
+            <textField isBlankWhenNull="true">
+                <reportElement x="0" y="0" width="80" height="30" uuid="c5b3c4c1-5068-4f01-9492-985f1e2957d2"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="80" y="0" width="100" height="30" uuid="c5b3c4c1-5068-4f01-9492-985f1e2957d3"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$F{nombre} + " " + ($F{segundoNombre} != null ? $F{segundoNombre} : "")]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="180" y="0" width="100" height="30" uuid="c5b3c4c1-5068-4f01-9492-985f1e2957d4"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$F{apellido} + " " + ($F{segundoApellido} != null ? $F{segundoApellido} : "")]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="280" y="0" width="80" height="30" uuid="c5b3c4c1-5068-4f01-9492-985f1e2957d5"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$F{telefono}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="360" y="0" width="175" height="30" uuid="c5b3c4c1-5068-4f01-9492-985f1e2957d6"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+</jasperReport>
