@@ -1,4 +1,4 @@
-package com.tienda.facil.core.dto;
+package com.tienda.facil.core.dto.request;
 
 import com.tienda.facil.core.utils.enums.EstadoPedido;
 import com.tienda.facil.core.utils.enums.MetodoPago;

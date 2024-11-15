@@ -1,6 +1,6 @@
 package com.tienda.facil.core.controller;
 
-import com.tienda.facil.core.dto.PedidoDto;
+import com.tienda.facil.core.dto.request.PedidoDto;
 import com.tienda.facil.core.dto.ResponseDTO;
 import com.tienda.facil.core.service.PedidoService;
 import io.swagger.v3.oas.annotations.Operation;
