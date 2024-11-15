@@ -13,8 +13,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TestDTO {
-
-
     @Schema(description = "Primer nombre del usuario", example = "Carlos", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "El campo 'name' es obligatorio")
     private String name;
