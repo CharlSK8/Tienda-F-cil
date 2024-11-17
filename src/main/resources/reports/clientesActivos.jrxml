@@ -24,7 +24,7 @@
     <field name="segundoNombre" class="java.lang.String"/>
     <field name="apellido" class="java.lang.String"/>
     <field name="segundoApellido" class="java.lang.String"/>
-    <field name="telefono" class="java.lang.String"/>
+    <field name="contacto" class="java.lang.String"/>
     <field name="email" class="java.lang.String"/>
     <field name="fechaRegistro" class="java.util.Date"/>
     <field name="activo" class="java.lang.String"/>
@@ -104,7 +104,7 @@
             <textField isBlankWhenNull="true">
                 <reportElement x="280" y="0" width="80" height="30" uuid="c5b3c4c1-5068-4f01-9492-985f1e2957d5"/>
                 <textElement textAlignment="Center"/>
-                <textFieldExpression><![CDATA[$F{telefono}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{contacto}]]></textFieldExpression>
             </textField>
             <textField isBlankWhenNull="true">
                 <reportElement x="360" y="0" width="175" height="30" uuid="c5b3c4c1-5068-4f01-9492-985f1e2957d6"/>
