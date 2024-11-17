@@ -6,8 +6,8 @@ import com.tienda.facil.core.dto.response.TokenResponse;
 import com.tienda.facil.core.mapper.IClienteMapper;
 import com.tienda.facil.core.model.Token;
 import com.tienda.facil.core.model.Cliente;
+import com.tienda.facil.core.repository.ClienteRepository;
 import com.tienda.facil.core.repository.TokenRepository;
-import com.tienda.facil.core.repository.UserRepository;
 import com.tienda.facil.core.service.IAuthService;
 import com.tienda.facil.core.util.result.Result;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ import java.util.Optional;
 public class AuthServiceImpl implements IAuthService {
 
     private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
+    private final ClienteRepository clienteRepository;
     private final TokenRepository tokenRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -38,7 +38,7 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     public Result<TokenResponse, String> register(ClienteRegisterRequestDTO clienteRegisterRequestDTO) {
         var user = buildCliente(clienteRegisterRequestDTO);
-        var userSaved = userRepository.save(user);
+        var userSaved = clienteRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(userSaved, jwtToken);
@@ -48,7 +48,7 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     public Result<TokenResponse, String> login(LoginRequestDTO loginRequest) {
 
-        final Optional<Cliente> userOptional = userRepository.findByEmail(loginRequest.getEmail());
+        final Optional<Cliente> userOptional = clienteRepository.findByEmail(loginRequest.getEmail());
 
         if(userOptional.isEmpty()){
             return createErrorResult("Email not found", HttpStatus.NOT_FOUND);
@@ -86,7 +86,7 @@ public class AuthServiceImpl implements IAuthService {
             return createErrorResult("Invalid refresh token", HttpStatus.UNAUTHORIZED);
         }
 
-        final Optional<Cliente> userOptional = userRepository.findByEmail(userEmail);
+        final Optional<Cliente> userOptional = clienteRepository.findByEmail(userEmail);
 
         if(userOptional.isEmpty()){
             return createErrorResult("User not found", HttpStatus.NOT_FOUND);
