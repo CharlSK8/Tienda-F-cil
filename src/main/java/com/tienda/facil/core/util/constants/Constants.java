@@ -11,6 +11,9 @@ public final class Constants {
     public static final String MESSAGE_ERROR = "Hubo un error interno al procesar la solicitud.";
     public static final String MESSAGE_ERROR_BODY = "Se detectaron errores en el cuerpo de la solicitud.";
 
+    public static final String PEDIDO_NO_ENCONTRADO = "Pedido no encontrado";
+    public static final String PEDIDOS_OBTENIDOS = "Pedidos obtenidos exitosamente";
+
     private Constants() {
         throw new IllegalStateException("Constants class");
     }
