@@ -1,14 +1,18 @@
 package com.tienda.facil.core.controller;
 
-import com.tienda.facil.core.service.ReportService;
-import com.tienda.facil.core.model.ClienteModel;
+import com.tienda.facil.core.model.Cliente;
 import com.tienda.facil.core.repository.ClienteRepository;
-import com.tienda.facil.core.utils.enums.EstadoActivo;
+import com.tienda.facil.core.service.ReportService;
+import com.tienda.facil.core.util.enums.EstadoActivo;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,13 +36,13 @@ public class ClienteController {
         this.reportService = reportService;
         this.clienteRepository = clienteRepository;
     }
-
+    @Operation(summary = "Reporte clientes activos", description = "Genera un reporte de todos los clientes los cuales se encuentran en estado ACTIVO.")
     @GetMapping("/reporte-activos")
     public ResponseEntity<byte[]> generateActiveClientsReport() {
         logger.info("Iniciando generación de reporte de clientes activos");
 
         // Obtener clientes activos
-        List<ClienteModel> activeClients = clienteRepository.findByActivo(EstadoActivo.ACTIVO);
+        List<Cliente> activeClients = clienteRepository.findByActivo(EstadoActivo.ACTIVO);
 
         if (activeClients.isEmpty()) {
             logger.warn("No se encontraron clientes activos para generar el reporte");
