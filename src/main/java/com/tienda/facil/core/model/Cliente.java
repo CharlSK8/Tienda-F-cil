@@ -1,5 +1,6 @@
 package com.tienda.facil.core.model;
 
+import com.tienda.facil.core.util.enums.EstadoActivo;
 import com.tienda.facil.core.util.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,6 @@ public class Cliente {
     private String segundoApellido;
     private String contacto;
     private LocalDateTime fechaRegistro;
-    private boolean activo = true;
 
     @Column(unique=true)
     private String email;
@@ -41,12 +41,15 @@ public class Cliente {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    //TODO: Relacion con pedidos
+    @Enumerated(EnumType.STRING)
+    private EstadoActivo activo = EstadoActivo.ACTIVO;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Pedido> pedidos;
 
     @PrePersist
     protected void onCreate() {
         fechaRegistro = LocalDateTime.now();
-        activo = true;
         roles = Set.of(Role.USER);
     }
 
