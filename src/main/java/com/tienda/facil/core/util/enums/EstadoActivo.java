@@ -1,4 +1,4 @@
-package com.tienda.facil.core.utils.enums;
+package com.tienda.facil.core.util.enums;
 
 /**
  * Enumeración que representa el estado de actividad.

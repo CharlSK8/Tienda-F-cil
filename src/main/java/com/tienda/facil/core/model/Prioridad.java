@@ -1,6 +1,6 @@
 package com.tienda.facil.core.model;
 
-import com.tienda.facil.core.utils.enums.PrioridadPedido;
+import com.tienda.facil.core.util.enums.PrioridadPedido;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -33,5 +33,5 @@ public class PrioridadModel {
      * Representa los pedidos asociados a esta prioridad.
      */
     @OneToMany(mappedBy = "prioridad", cascade = CascadeType.ALL)
-    private List<PedidoModel> pedidos;
+    private List<Pedido> pedidos;
 }
