@@ -32,10 +32,6 @@ public class ClienteController {
     private final ReportService reportService;
     private final ClienteRepository clienteRepository;
 
-    public ClienteController(ReportService reportService, ClienteRepository clienteRepository) {
-        this.reportService = reportService;
-        this.clienteRepository = clienteRepository;
-    }
     @Operation(summary = "Reporte clientes activos", description = "Genera un reporte de todos los clientes los cuales se encuentran en estado ACTIVO.")
     @GetMapping("/reporte-activos")
     public ResponseEntity<byte[]> generateActiveClientsReport() {
