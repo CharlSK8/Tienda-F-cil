@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "prioridad")  // Nombre de la tabla
-public class PrioridadModel {
+public class Prioridad {
 
     /**
      * Identificador único de la prioridad.

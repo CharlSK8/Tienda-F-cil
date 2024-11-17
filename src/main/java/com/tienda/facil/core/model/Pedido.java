@@ -19,7 +19,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "pedido")  // Nombre de la tabla
-public class PedidoModel {
+public class Pedido {
 
     /**
      * Identificador único del pedido.
@@ -42,7 +42,7 @@ public class PedidoModel {
      */
     @ManyToOne
     @JoinColumn(name = "prioridad_id", referencedColumnName = "id")
-    private PrioridadModel prioridad;
+    private Prioridad prioridad;
 
     /**
      * Fecha en la que se realizó el pedido.
