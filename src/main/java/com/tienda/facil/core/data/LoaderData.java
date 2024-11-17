@@ -1,15 +1,16 @@
 package com.tienda.facil.core.data;
 
-import com.tienda.facil.core.model.ClienteModel;
-import com.tienda.facil.core.model.PedidoModel;
-import com.tienda.facil.core.model.PrioridadModel;
+import com.tienda.facil.core.model.Cliente;
+import com.tienda.facil.core.model.Pedido;
+import com.tienda.facil.core.model.Prioridad;
 import com.tienda.facil.core.repository.ClienteRepository;
 import com.tienda.facil.core.repository.PedidoRepository;
 import com.tienda.facil.core.repository.PrioridadRepository;
-import com.tienda.facil.core.utils.enums.EstadoActivo;
-import com.tienda.facil.core.utils.enums.EstadoPedido;
-import com.tienda.facil.core.utils.enums.MetodoPago;
-import com.tienda.facil.core.utils.enums.PrioridadPedido;
+import com.tienda.facil.core.util.enums.EstadoActivo;
+import com.tienda.facil.core.util.enums.EstadoPedido;
+import com.tienda.facil.core.util.enums.MetodoPago;
+import com.tienda.facil.core.util.enums.PrioridadPedido;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,7 @@ import java.util.Optional;
  * automáticamente cuando la aplicación Spring Boot se inicia.
  */
 @Component
+@AllArgsConstructor
 public class LoaderData implements CommandLineRunner {
 
     private final SecureRandom random = new SecureRandom();
@@ -34,12 +36,6 @@ public class LoaderData implements CommandLineRunner {
 
     private final PedidoRepository pedidoRepository;
 
-    public LoaderData(ClienteRepository clienteRepository, PrioridadRepository prioridadRepository, PedidoRepository pedidoRepository) {
-
-        this.clienteRepository = clienteRepository;
-        this.prioridadRepository = prioridadRepository;
-        this.pedidoRepository = pedidoRepository;
-    }
 
     /**
      * Método que carga datos iniciales en la base de datos. Se ejecuta automáticamente al inicio de la aplicación.
@@ -52,19 +48,18 @@ public class LoaderData implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         // 1. Comprobar si el cliente ya existe en la base de datos mediante su email
-        Optional<ClienteModel> clienteOpt = clienteRepository.findByEmail("juan@example.com");
-        ClienteModel cliente;
+        Optional<Cliente> clienteOpt = clienteRepository.findByEmail("juan@example.com");
+        Cliente cliente;
 
         if (clienteOpt.isEmpty()) {
             // Crear un nuevo cliente si no existe
-            cliente = new ClienteModel();
+            cliente = new Cliente();
             cliente.setNombre("Juan");
             cliente.setSegundoNombre("Carlos");
             cliente.setApellido("Pérez");
             cliente.setSegundoApellido("Gómez");
-            cliente.setTelefono("123456789");
+            cliente.setContacto("123456789");
             cliente.setEmail("juan@example.com");
-            cliente.setFechaRegistro(new Date());
             cliente.setActivo(EstadoActivo.ACTIVO);
             cliente = clienteRepository.save(cliente); // Guardar el cliente en la base de datos
         } else {
@@ -72,12 +67,12 @@ public class LoaderData implements CommandLineRunner {
         }
 
         // 2. Comprobar si la prioridad ya existe en la base de datos por su nombre
-        Optional<PrioridadModel> prioridadOpt = prioridadRepository.findByNombre(PrioridadPedido.ALTA);
-        PrioridadModel prioridad;
+        Optional<Prioridad> prioridadOpt = prioridadRepository.findByNombre(PrioridadPedido.ALTA);
+        Prioridad prioridad;
 
         if (prioridadOpt.isEmpty()) {
             // Crear una nueva prioridad si no existe
-            prioridad = new PrioridadModel();
+            prioridad = new Prioridad();
             prioridad.setNombre(PrioridadPedido.ALTA);
             prioridad = prioridadRepository.save(prioridad); // Guardar la prioridad en la base de datos
         } else {
@@ -87,7 +82,7 @@ public class LoaderData implements CommandLineRunner {
         // 3. Comprobar si ya existe un pedido con este cliente y esta prioridad
         if (pedidoRepository.findFirstByClienteAndPrioridad(cliente, prioridad).isEmpty()) {
             // Crear un nuevo pedido si no existe uno con este cliente y prioridad específicos
-            PedidoModel pedido = new PedidoModel();
+            Pedido pedido = new Pedido();
             pedido.setCliente(cliente);
             pedido.setPrioridad(prioridad);
             pedido.setFechaPedido(new Date());

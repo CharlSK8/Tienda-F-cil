@@ -1,7 +1,7 @@
 package com.tienda.facil.core.config;
 
 import com.tienda.facil.core.model.Cliente;
-import com.tienda.facil.core.repository.UserRepository;
+import com.tienda.facil.core.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class AppConfig {
 
-    private final UserRepository userRepository;
+    private final ClienteRepository clienteRepository;
 
     /**
      * Proporciona una implementación de {@link UserDetailsService} que se utiliza para cargar los detalles
@@ -31,7 +31,7 @@ public class AppConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return email -> {
-            final Cliente cliente = userRepository.findByEmail(email)
+            final Cliente cliente = clienteRepository.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
             return org.springframework.security.core.userdetails.User.builder()
                     .username(cliente.getEmail())

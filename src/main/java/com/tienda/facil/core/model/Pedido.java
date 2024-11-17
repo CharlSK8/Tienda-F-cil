@@ -1,7 +1,7 @@
 package com.tienda.facil.core.model;
 
-import com.tienda.facil.core.utils.enums.EstadoPedido;
-import com.tienda.facil.core.utils.enums.MetodoPago;
+import com.tienda.facil.core.util.enums.EstadoPedido;
+import com.tienda.facil.core.util.enums.MetodoPago;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,7 +19,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "pedido")  // Nombre de la tabla
-public class PedidoModel {
+public class Pedido {
 
     /**
      * Identificador único del pedido.
@@ -34,7 +34,7 @@ public class PedidoModel {
      */
     @ManyToOne
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")
-    private ClienteModel cliente;
+    private Cliente cliente;
 
     /**
      * Relación muchos a uno con Prioridad.
@@ -42,7 +42,7 @@ public class PedidoModel {
      */
     @ManyToOne
     @JoinColumn(name = "prioridad_id", referencedColumnName = "id")
-    private PrioridadModel prioridad;
+    private Prioridad prioridad;
 
     /**
      * Fecha en la que se realizó el pedido.

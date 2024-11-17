@@ -1,8 +1,8 @@
 package com.tienda.facil.core.repository;
 
-import com.tienda.facil.core.model.ClienteModel;
-import com.tienda.facil.core.model.PedidoModel;
-import com.tienda.facil.core.model.PrioridadModel;
+import com.tienda.facil.core.model.Cliente;
+import com.tienda.facil.core.model.Pedido;
+import com.tienda.facil.core.model.Prioridad;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -11,7 +11,7 @@ import java.util.Optional;
  * Repositorio para la entidad PedidoModel.
  * Extiende JpaRepository para proporcionar métodos CRUD básicos.
  */
-public interface PedidoRepository extends JpaRepository<PedidoModel, Long> {
+public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     /*
      * create o insert en DDBB
@@ -25,5 +25,5 @@ public interface PedidoRepository extends JpaRepository<PedidoModel, Long> {
      * @param prioridad la prioridad del pedido
      * @return un Optional que contiene el PedidoModel si se encuentra, o vacío si no
      */
-    Optional<PedidoModel> findFirstByClienteAndPrioridad(ClienteModel cliente, PrioridadModel prioridad);
+    Optional<Pedido> findFirstByClienteAndPrioridad(Cliente cliente, Prioridad prioridad);
 }

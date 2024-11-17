@@ -1,26 +1,15 @@
 package com.tienda.facil.core.repository;
 
-import com.tienda.facil.core.model.ClienteModel;
-import com.tienda.facil.core.utils.enums.EstadoActivo;
+import com.tienda.facil.core.model.Cliente;
+import com.tienda.facil.core.util.enums.EstadoActivo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Repositorio para la entidad ClienteModel.
- * Proporciona métodos para realizar operaciones CRUD en la base de datos.
- */
-public interface ClienteRepository extends JpaRepository<ClienteModel, Long> {
-
-    /**
-     * Busca un cliente por su correo electrónico.
-     *
-     * @param email el correo electrónico del cliente
-     * @return un Optional que contiene el cliente si se encuentra, o vacío si no
-     */
-    Optional<ClienteModel> findByEmail(String email);  // Método personalizado
-
-    // Buscar clientes activos
-    List<ClienteModel> findByActivo(EstadoActivo activo);
+@Repository
+public interface ClienteRepository extends JpaRepository<Cliente, Long> {
+    Optional<Cliente> findByEmail(String email);
+    List<Cliente> findByActivo(EstadoActivo activo);
 }

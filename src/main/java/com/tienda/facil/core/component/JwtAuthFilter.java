@@ -2,8 +2,8 @@ package com.tienda.facil.core.component;
 
 import com.tienda.facil.core.model.Token;
 import com.tienda.facil.core.model.Cliente;
+import com.tienda.facil.core.repository.ClienteRepository;
 import com.tienda.facil.core.repository.TokenRepository;
-import com.tienda.facil.core.repository.UserRepository;
 import com.tienda.facil.core.service.impl.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,7 +29,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final TokenRepository tokenRepository;
-    private final UserRepository userRepository;
+    private final ClienteRepository clienteRepository;
 
     /**
      * Filtro interno que se ejecuta en cada solicitud HTTP para realizar tareas específicas antes de
@@ -69,7 +69,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-        final Optional<Cliente> user = userRepository.findByEmail(userEmail);
+        final Optional<Cliente> user = clienteRepository.findByEmail(userEmail);
 
         if(user.isEmpty()){
             filterChain.doFilter(request, response);

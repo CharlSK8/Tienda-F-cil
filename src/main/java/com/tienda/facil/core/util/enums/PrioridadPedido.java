@@ -1,4 +1,4 @@
-package com.tienda.facil.core.utils.enums;
+package com.tienda.facil.core.util.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

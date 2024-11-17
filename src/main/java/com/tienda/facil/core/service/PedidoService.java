@@ -1,15 +1,16 @@
 package com.tienda.facil.core.service;
 
 import com.tienda.facil.core.dto.request.PedidoDto;
-import com.tienda.facil.core.dto.ResponseDTO;
-import com.tienda.facil.core.model.ClienteModel;
-import com.tienda.facil.core.model.PedidoModel;
-import com.tienda.facil.core.model.PrioridadModel;
+import com.tienda.facil.core.dto.response.ResponseDTO;
+import com.tienda.facil.core.model.Cliente;
+import com.tienda.facil.core.model.Pedido;
+import com.tienda.facil.core.model.Prioridad;
 import com.tienda.facil.core.repository.ClienteRepository;
 import com.tienda.facil.core.repository.PedidoRepository;
 import com.tienda.facil.core.repository.PrioridadRepository;
-import com.tienda.facil.core.utils.Constantes;
+import com.tienda.facil.core.util.constants.Constants;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -25,24 +26,12 @@ import static java.util.stream.Collectors.*;
  * Servicio para la gestión de pedidos.
  */
 @Service
+@AllArgsConstructor
 public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
     private final ClienteRepository clienteRepository;
     private final PrioridadRepository prioridadRepository;
-
-    /**
-     * Constructor de PedidoService.
-     *
-     * @param pedidoRepository    Repositorio de pedidos.
-     * @param clienteRepository   Repositorio de clientes.
-     * @param prioridadRepository Repositorio de prioridades.
-     */
-    public PedidoService(PedidoRepository pedidoRepository, ClienteRepository clienteRepository, PrioridadRepository prioridadRepository) {
-        this.pedidoRepository = pedidoRepository;
-        this.clienteRepository = clienteRepository;
-        this.prioridadRepository = prioridadRepository;
-    }
 
     /**
      * Crea un nuevo pedido en la base de datos.
@@ -66,18 +55,18 @@ public class PedidoService {
 
         try {
             // Validar cliente
-            ClienteModel cliente = clienteRepository.findById(pedidoDto.getClienteId())
+            Cliente cliente = clienteRepository.findById(pedidoDto.getClienteId())
                     .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado"));
 
             // Validar prioridad
-            PrioridadModel prioridad = prioridadRepository.findById(pedidoDto.getPrioridadId())
+            Prioridad prioridad = prioridadRepository.findById(pedidoDto.getPrioridadId())
                     .orElseThrow(() -> new IllegalArgumentException("Prioridad no encontrada"));
 
             // Mapear PedidoDto a PedidoModel
-            PedidoModel pedidoModel = getPedidoModel(pedidoDto, cliente, prioridad);
+            Pedido pedido = getPedidoModel(pedidoDto, cliente, prioridad);
 
             // Guardar el pedido en la base de datos llamando al Repository
-            PedidoModel nuevoPedido = pedidoRepository.save(pedidoModel);
+            Pedido nuevoPedido = pedidoRepository.save(pedido);
 
             // Construir y devolver respuesta exitosa
             return ResponseDTO.builder()
@@ -103,25 +92,25 @@ public class PedidoService {
     }
 
     /**
-     * Convierte un {@link PedidoDto} a un {@link PedidoModel}.
+     * Convierte un {@link PedidoDto} a un {@link Pedido}.
      *
      * @param pedidoDto El objeto {@link PedidoDto} que contiene los datos del pedido.
-     * @param cliente   El objeto {@link ClienteModel} asociado al pedido.
-     * @param prioridad El objeto {@link PrioridadModel} asociado al pedido.
-     * @return El objeto {@link PedidoModel} mapeado.
+     * @param cliente   El objeto {@link Cliente} asociado al pedido.
+     * @param prioridad El objeto {@link Prioridad} asociado al pedido.
+     * @return El objeto {@link Pedido} mapeado.
      */
-    private static PedidoModel getPedidoModel(PedidoDto pedidoDto, ClienteModel cliente, PrioridadModel prioridad) {
-        PedidoModel pedidoModel = new PedidoModel();
-        pedidoModel.setCliente(cliente);
-        pedidoModel.setPrioridad(prioridad);
-        pedidoModel.setFechaPedido(pedidoDto.getFechaPedido());
-        pedidoModel.setFechaEntrega(pedidoDto.getFechaEntrega());
-        pedidoModel.setEstadoPedido(pedidoDto.getEstadoPedido());
-        pedidoModel.setMontoTotal(pedidoDto.getMontoTotal());
-        pedidoModel.setMetodoPago(pedidoDto.getMetodoPago());
-        pedidoModel.setDireccionEnvio(pedidoDto.getDireccionEnvio());
-        pedidoModel.setNumeroSeguimiento(pedidoDto.getNumeroSeguimiento());
-        return pedidoModel;
+    private static Pedido getPedidoModel(PedidoDto pedidoDto, Cliente cliente, Prioridad prioridad) {
+        Pedido pedido = new Pedido();
+        pedido.setCliente(cliente);
+        pedido.setPrioridad(prioridad);
+        pedido.setFechaPedido(pedidoDto.getFechaPedido());
+        pedido.setFechaEntrega(pedidoDto.getFechaEntrega());
+        pedido.setEstadoPedido(pedidoDto.getEstadoPedido());
+        pedido.setMontoTotal(pedidoDto.getMontoTotal());
+        pedido.setMetodoPago(pedidoDto.getMetodoPago());
+        pedido.setDireccionEnvio(pedidoDto.getDireccionEnvio());
+        pedido.setNumeroSeguimiento(pedidoDto.getNumeroSeguimiento());
+        return pedido;
     }
 
     /**
@@ -144,33 +133,33 @@ public class PedidoService {
                     .build();
         }
 
-        Optional<PedidoModel> pedidoOpt = pedidoRepository.findById(id);
+        Optional<Pedido> pedidoOpt = pedidoRepository.findById(id);
 
         if (pedidoOpt.isPresent()) {
-            PedidoModel pedidoModel = pedidoOpt.get();
+            Pedido pedido = pedidoOpt.get();
 
             // Validar y asignar cliente
-            ClienteModel cliente = clienteRepository.findById(pedidoDto.getClienteId())
+            Cliente cliente = clienteRepository.findById(pedidoDto.getClienteId())
                     .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado"));
 
             // Validar y asignar prioridad
-            PrioridadModel prioridad = prioridadRepository.findById(pedidoDto.getPrioridadId())
+            Prioridad prioridad = prioridadRepository.findById(pedidoDto.getPrioridadId())
                     .orElseThrow(() -> new IllegalArgumentException("Prioridad no encontrada"));
 
             // Actualizar los campos del pedido
-            pedidoModel.setCliente(cliente);
-            pedidoModel.setPrioridad(prioridad);
-            pedidoModel.setFechaPedido(pedidoDto.getFechaPedido());
-            pedidoModel.setFechaEntrega(pedidoDto.getFechaEntrega());
-            pedidoModel.setEstadoPedido(pedidoDto.getEstadoPedido());
-            pedidoModel.setFechaModificacion(new Date());
-            pedidoModel.setMontoTotal(pedidoDto.getMontoTotal());
-            pedidoModel.setMetodoPago(pedidoDto.getMetodoPago());
-            pedidoModel.setDireccionEnvio(pedidoDto.getDireccionEnvio());
-            pedidoModel.setNumeroSeguimiento(pedidoDto.getNumeroSeguimiento());
+            pedido.setCliente(cliente);
+            pedido.setPrioridad(prioridad);
+            pedido.setFechaPedido(pedidoDto.getFechaPedido());
+            pedido.setFechaEntrega(pedidoDto.getFechaEntrega());
+            pedido.setEstadoPedido(pedidoDto.getEstadoPedido());
+            pedido.setFechaModificacion(new Date());
+            pedido.setMontoTotal(pedidoDto.getMontoTotal());
+            pedido.setMetodoPago(pedidoDto.getMetodoPago());
+            pedido.setDireccionEnvio(pedidoDto.getDireccionEnvio());
+            pedido.setNumeroSeguimiento(pedidoDto.getNumeroSeguimiento());
 
             // Guardar los cambios en el repositorio
-            PedidoModel pedidoActualizado = pedidoRepository.save(pedidoModel);
+            Pedido pedidoActualizado = pedidoRepository.save(pedido);
 
             return ResponseDTO.builder()
                     .response(pedidoActualizado)
@@ -179,7 +168,7 @@ public class PedidoService {
                     .build();
         } else {
             return ResponseDTO.builder()
-                    .message(Constantes.PEDIDO_NO_ENCONTRADO)
+                    .message(Constants.PEDIDO_NO_ENCONTRADO)
                     .code(HttpStatus.NOT_FOUND.value())
                     .build();
         }
@@ -199,7 +188,7 @@ public class PedidoService {
         return ResponseDTO.builder()
                 .response(pedidos)
                 .code(HttpStatus.OK.value())
-                .message(Constantes.PEDIDOS_OBTENIDOS)
+                .message(Constants.PEDIDOS_OBTENIDOS)
                 .build();
     }
 
@@ -210,7 +199,7 @@ public class PedidoService {
      * @return {@link ResponseDTO} con el pedido obtenido o un mensaje de error.
      */
     public ResponseDTO obtenerPedido(Long id) {
-        Optional<PedidoModel> pedidoOpt = pedidoRepository.findById(id);
+        Optional<Pedido> pedidoOpt = pedidoRepository.findById(id);
 
         if (pedidoOpt.isPresent()) {
             PedidoDto pedidoDto = convertToDto(pedidoOpt.get());
@@ -221,29 +210,29 @@ public class PedidoService {
                     .build();
         } else {
             return ResponseDTO.builder()
-                    .message(Constantes.PEDIDO_NO_ENCONTRADO)
+                    .message(Constants.PEDIDO_NO_ENCONTRADO)
                     .code(HttpStatus.NOT_FOUND.value())
                     .build();
         }
     }
 
     /**
-     * Convierte un {@link PedidoModel} a un {@link PedidoDto}.
+     * Convierte un {@link Pedido} a un {@link PedidoDto}.
      *
-     * @param pedidoModel El objeto {@link PedidoModel} a convertir.
+     * @param pedido El objeto {@link Pedido} a convertir.
      * @return El objeto {@link PedidoDto} convertido.
      */
-    private PedidoDto convertToDto(PedidoModel pedidoModel) {
+    private PedidoDto convertToDto(Pedido pedido) {
         PedidoDto dto = new PedidoDto();
-        dto.setClienteId(pedidoModel.getCliente().getId());
-        dto.setPrioridadId(pedidoModel.getPrioridad().getId());
-        dto.setFechaPedido(pedidoModel.getFechaPedido());
-        dto.setFechaEntrega(pedidoModel.getFechaEntrega());
-        dto.setEstadoPedido(pedidoModel.getEstadoPedido());
-        dto.setMontoTotal(pedidoModel.getMontoTotal());
-        dto.setMetodoPago(pedidoModel.getMetodoPago());
-        dto.setDireccionEnvio(pedidoModel.getDireccionEnvio());
-        dto.setNumeroSeguimiento(pedidoModel.getNumeroSeguimiento());
+        dto.setClienteId(pedido.getCliente().getId());
+        dto.setPrioridadId(pedido.getPrioridad().getId());
+        dto.setFechaPedido(pedido.getFechaPedido());
+        dto.setFechaEntrega(pedido.getFechaEntrega());
+        dto.setEstadoPedido(pedido.getEstadoPedido());
+        dto.setMontoTotal(pedido.getMontoTotal());
+        dto.setMetodoPago(pedido.getMetodoPago());
+        dto.setDireccionEnvio(pedido.getDireccionEnvio());
+        dto.setNumeroSeguimiento(pedido.getNumeroSeguimiento());
         return dto;
     }
 
@@ -254,7 +243,7 @@ public class PedidoService {
      * @return {@link ResponseDTO} que indica si la eliminación fue exitosa o si ocurrió un error.
      */
     public ResponseDTO eliminarPedido(Long id) {
-        Optional<PedidoModel> pedidoOpt = pedidoRepository.findById(id);
+        Optional<Pedido> pedidoOpt = pedidoRepository.findById(id);
 
         if (pedidoOpt.isPresent()) {
             pedidoRepository.deleteById(id);
