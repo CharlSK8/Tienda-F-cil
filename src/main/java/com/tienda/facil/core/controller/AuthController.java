@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/tienda/facil/api/v1/auth")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 @Tag(name = "Authentication", description = "Endpoints para autenticación de usuarios")
