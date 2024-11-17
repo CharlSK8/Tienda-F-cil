@@ -18,8 +18,12 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/clientes")
+@RequiredArgsConstructor
+@CrossOrigin("*")
+@Tag(name = "Clientes", description = "Endpoints para la gestión de clientes")
+@RequestMapping("/tienda/facil/api/v1/clientes")
 public class ClienteController {
+
     private static final Logger logger = LoggerFactory.getLogger(ClienteController.class);
     private final ReportService reportService;
     private final ClienteRepository clienteRepository;
