@@ -1,4 +1,4 @@
-package com.tienda.facil.core.controller.producto;
+package com.tienda.facil.core.controller;
 
 import com.tienda.facil.core.dto.request.producto.CategoriaProductoDto;
 import com.tienda.facil.core.dto.response.ResponseDTO;
