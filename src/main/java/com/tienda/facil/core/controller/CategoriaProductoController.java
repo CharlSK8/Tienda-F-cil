@@ -48,7 +48,7 @@ public class CategoriaProductoController {
     })
     @PostMapping
     public ResponseEntity<ResponseDTO> crearCategoria(@Valid @RequestBody CategoriaProductoDto categoriaProductoDto) {
-        ResponseDTO response = categoriaProductoService.crearCategoria(categoriaProductoDto);
+        ResponseDTO<Object> response = categoriaProductoService.crearCategoria(categoriaProductoDto);
         return ResponseEntity.status(response.getCode()).body(response);
     }
 
@@ -66,7 +66,7 @@ public class CategoriaProductoController {
     })
     @GetMapping
     public ResponseEntity<ResponseDTO> obtenerCategorias() {
-        ResponseDTO response = categoriaProductoService.obtenerCategorias();
+        ResponseDTO<Object> response = categoriaProductoService.obtenerCategorias();
         return ResponseEntity.status(response.getCode()).body(response);
     }
 
@@ -87,7 +87,7 @@ public class CategoriaProductoController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDTO> eliminarCategoria(@PathVariable Long id) {
-        ResponseDTO response = categoriaProductoService.eliminarCategoria(id);
+        ResponseDTO<Object> response = categoriaProductoService.eliminarCategoria(id);
         return ResponseEntity.status(response.getCode()).body(response);
     }
 
@@ -111,7 +111,7 @@ public class CategoriaProductoController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO> actualizarCategoria(@PathVariable Long id, @Valid @RequestBody CategoriaProductoDto categoriaProductoDto) {
-        ResponseDTO response = categoriaProductoService.actualizarCategoria(id, categoriaProductoDto);
+        ResponseDTO<Object> response = categoriaProductoService.actualizarCategoria(id, categoriaProductoDto);
         return ResponseEntity.status(response.getCode()).body(response);
     }
 }
