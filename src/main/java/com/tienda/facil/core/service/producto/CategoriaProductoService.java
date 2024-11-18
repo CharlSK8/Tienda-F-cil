@@ -2,7 +2,7 @@ package com.tienda.facil.core.service.producto;
 
 import com.tienda.facil.core.dto.response.ResponseDTO;
 import com.tienda.facil.core.dto.request.producto.CategoriaProductoDto;
-import com.tienda.facil.core.model.producto.CategoriaProductoModel;
+import com.tienda.facil.core.model.CategoriaProducto;
 import com.tienda.facil.core.repository.producto.CategoriaProductoRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -36,10 +36,10 @@ public class CategoriaProductoService {
     public ResponseDTO<Object> crearCategoria(CategoriaProductoDto categoriaProductoDto) {
         try {
             // Convierte el DTO al modelo de entidad
-            CategoriaProductoModel categoriaModel = getCategoriaModelFromDto(categoriaProductoDto);
+            CategoriaProducto categoriaModel = getCategoriaModelFromDto(categoriaProductoDto);
 
             // Guarda la nueva categoría en la base de datos
-            CategoriaProductoModel nuevaCategoria = categoriaProductoRepository.save(categoriaModel);
+            CategoriaProducto nuevaCategoria = categoriaProductoRepository.save(categoriaModel);
 
             return ResponseDTO.builder().response(nuevaCategoria).code(HttpStatus.CREATED.value()).message("Categoría creada exitosamente").build();
 
@@ -49,20 +49,20 @@ public class CategoriaProductoService {
     }
 
     /**
-     * Convierte un {@link CategoriaProductoDto} a un {@link CategoriaProductoModel}.
+     * Convierte un {@link CategoriaProductoDto} a un {@link CategoriaProducto}.
      *
      * @param categoriaProductoDto El objeto {@link CategoriaProductoDto} que contiene los datos de la categoría.
-     * @return El objeto {@link CategoriaProductoModel} mapeado.
+     * @return El objeto {@link CategoriaProducto} mapeado.
      */
-    private CategoriaProductoModel getCategoriaModelFromDto(CategoriaProductoDto categoriaProductoDto) {
-        CategoriaProductoModel categoriaProductoModel = new CategoriaProductoModel();
-        categoriaProductoModel.setCategoriaProducto(categoriaProductoDto.getCategoriaProducto());
-        categoriaProductoModel.setDescripcion(categoriaProductoDto.getDescripcion());
-        categoriaProductoModel.setFechaCreacion(new Date()); // Fecha de creación establecida automáticamente
-        categoriaProductoModel.setFechaModificacion(new Date()); // Fecha de modificación inicial
+    private CategoriaProducto getCategoriaModelFromDto(CategoriaProductoDto categoriaProductoDto) {
+        CategoriaProducto categoriaProducto = new CategoriaProducto();
+        categoriaProducto.setCategoriaProducto(categoriaProductoDto.getCategoriaProducto());
+        categoriaProducto.setDescripcion(categoriaProductoDto.getDescripcion());
+        categoriaProducto.setFechaCreacion(new Date()); // Fecha de creación establecida automáticamente
+        categoriaProducto.setFechaModificacion(new Date()); // Fecha de modificación inicial
 
-        categoriaProductoModel.setEstadoCategoria(categoriaProductoDto.getEstadoCategoria());
-        return categoriaProductoModel;
+        categoriaProducto.setEstadoCategoria(categoriaProductoDto.getEstadoCategoria());
+        return categoriaProducto;
     }
 
     /**
@@ -75,7 +75,7 @@ public class CategoriaProductoService {
     public ResponseDTO<Object> actualizarCategoria(Long id, @Valid CategoriaProductoDto categoriaProductoDto) {
         try {
             // Busca la categoría a actualizar
-            CategoriaProductoModel categoriaModel = categoriaProductoRepository.findById(id).orElseThrow(() -> new Exception("Categoría no encontrada"));
+            CategoriaProducto categoriaModel = categoriaProductoRepository.findById(id).orElseThrow(() -> new Exception("Categoría no encontrada"));
 
             // Actualiza los datos de la categoría
             categoriaModel.setCategoriaProducto(categoriaProductoDto.getCategoriaProducto());
@@ -84,7 +84,7 @@ public class CategoriaProductoService {
             categoriaModel.setEstadoCategoria(categoriaProductoDto.getEstadoCategoria());
 
             // Guarda los cambios en la base de datos
-            CategoriaProductoModel categoriaActualizada = categoriaProductoRepository.save(categoriaModel);
+            CategoriaProducto categoriaActualizada = categoriaProductoRepository.save(categoriaModel);
 
             return ResponseDTO.builder().response(categoriaActualizada).code(HttpStatus.OK.value()).message("Categoría actualizada exitosamente").build();
 
@@ -101,7 +101,7 @@ public class CategoriaProductoService {
     public ResponseDTO<Object> obtenerCategorias() {
         try {
             // Obtiene todas las categorías de la base de datos
-            Iterable<CategoriaProductoModel> categorias = categoriaProductoRepository.findAll();
+            Iterable<CategoriaProducto> categorias = categoriaProductoRepository.findAll();
 
             return ResponseDTO.builder().response(categorias).code(HttpStatus.OK.value()).message("Categorías obtenidas exitosamente").build();
 
@@ -119,7 +119,7 @@ public class CategoriaProductoService {
     public ResponseDTO<Object> eliminarCategoria(Long id) {
         try {
             // Busca la categoría a eliminar
-            CategoriaProductoModel categoriaModel = categoriaProductoRepository.findById(id).orElseThrow(() -> new Exception("Categoría no encontrada"));
+            CategoriaProducto categoriaModel = categoriaProductoRepository.findById(id).orElseThrow(() -> new Exception("Categoría no encontrada"));
 
             // Elimina la categoría de la base de datos
             categoriaProductoRepository.delete(categoriaModel);

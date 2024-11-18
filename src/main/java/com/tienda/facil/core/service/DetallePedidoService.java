@@ -1,6 +1,6 @@
 package com.tienda.facil.core.service;
 
-import com.tienda.facil.core.model.DetallePedidoModel;
+import com.tienda.facil.core.model.DetallePedido;
 import com.tienda.facil.core.repository.DetallePedidoRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,19 +15,19 @@ public class DetallePedidoService {
         this.detallePedidoRepository = detallePedidoRepository;
     }
 
-    public List<DetallePedidoModel> obtenerDetalles() {
+    public List<DetallePedido> obtenerDetalles() {
         return detallePedidoRepository.findAll();
     }
 
-    public Optional<DetallePedidoModel> obtenerDetalle(Long id) {
+    public Optional<DetallePedido> obtenerDetalle(Long id) {
         return detallePedidoRepository.findById(id);
     }
 
-    public DetallePedidoModel guardarDetalle(DetallePedidoModel detallePedido) {
+    public DetallePedido guardarDetalle(DetallePedido detallePedido) {
         return detallePedidoRepository.save(detallePedido);
     }
 
-    public DetallePedidoModel actualizarDetalle(Long id, DetallePedidoModel detallePedido) {
+    public DetallePedido actualizarDetalle(Long id, DetallePedido detallePedido) {
         detallePedido.setId(id);
         return detallePedidoRepository.save(detallePedido);
     }

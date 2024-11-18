@@ -1,6 +1,6 @@
 package com.tienda.facil.core.controller;
 
-import com.tienda.facil.core.model.DetallePedidoModel;
+import com.tienda.facil.core.model.DetallePedido;
 import com.tienda.facil.core.service.DetallePedidoService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,24 +17,24 @@ public class DetalltePedidoController {
     }
 
     @GetMapping
-    public List<DetallePedidoModel> obtenerDetalles() {
+    public List<DetallePedido> obtenerDetalles() {
         return detallePedidoService.obtenerDetalles();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DetallePedidoModel> obtenerDetalle(@PathVariable Long id) {
+    public ResponseEntity<DetallePedido> obtenerDetalle(@PathVariable Long id) {
         return detallePedidoService.obtenerDetalle(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public DetallePedidoModel guardarDetalle(@RequestBody DetallePedidoModel detallePedido) {
+    public DetallePedido guardarDetalle(@RequestBody DetallePedido detallePedido) {
         return detallePedidoService.guardarDetalle(detallePedido);
     }
 
     @PutMapping("/{id}")
-    public DetallePedidoModel actualizarDetalle(@PathVariable Long id, @RequestBody DetallePedidoModel detallePedido) {
+    public DetallePedido actualizarDetalle(@PathVariable Long id, @RequestBody DetallePedido detallePedido) {
         return detallePedidoService.actualizarDetalle(id, detallePedido);
     }
 

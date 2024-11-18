@@ -1,6 +1,5 @@
-package com.tienda.facil.core.model.producto;
+package com.tienda.facil.core.model;
 
-import com.tienda.facil.core.util.enums.CategoriaProducto;
 import com.tienda.facil.core.util.enums.EstadoCategoria;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -13,7 +12,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "categoria_producto")
-public class CategoriaProductoModel {
+public class CategoriaProducto {
 
     /**
      * Identificador único de la categoría de producto.
@@ -26,7 +25,7 @@ public class CategoriaProductoModel {
      * Categoría del producto.
      */
     @Enumerated(EnumType.STRING)
-    private CategoriaProducto categoriaProducto;
+    private com.tienda.facil.core.util.enums.CategoriaProducto categoriaProducto;
 
     /**
      * Descripción de la categoría del producto.
