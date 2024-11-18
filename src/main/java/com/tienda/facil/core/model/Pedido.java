@@ -1,8 +1,7 @@
 package com.tienda.facil.core.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.tienda.facil.core.utils.enums.EstadoPedido;
-import com.tienda.facil.core.utils.enums.MetodoPago;
+import com.tienda.facil.core.util.enums.EstadoPedido;
+import com.tienda.facil.core.util.enums.MetodoPago;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,12 +10,16 @@ import java.util.Date;
 
 /**
  * Modelo de datos para la entidad Pedido.
+ * Representa un pedido realizado por un cliente.
  */
 @NoArgsConstructor
 @Data
+@Getter
+@Setter
+@AllArgsConstructor
 @Entity
-@Table(name = "pedido")
-public class PedidoModel {
+@Table(name = "pedido")  // Nombre de la tabla
+public class Pedido {
 
     /**
      * Identificador único del pedido.
@@ -26,20 +29,20 @@ public class PedidoModel {
     private Long id;
 
     /**
-     * Cliente asociado al pedido.
-     * Define el propietario de la relación.
+     * Relación muchos a uno con Cliente.
+     * Representa el cliente que realiza el pedido.
      */
     @ManyToOne
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")
-    @JsonManagedReference
-    private ClienteModel cliente;
+    private Cliente cliente;
 
     /**
-     * Prioridad del pedido.
+     * Relación muchos a uno con Prioridad.
+     * Representa la prioridad del pedido.
      */
     @ManyToOne
     @JoinColumn(name = "prioridad_id", referencedColumnName = "id")
-    private PrioridadModel prioridad;
+    private Prioridad prioridad;
 
     /**
      * Fecha en la que se realizó el pedido.

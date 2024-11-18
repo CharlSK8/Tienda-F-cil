@@ -1,7 +1,7 @@
-package com.tienda.facil.core.dto;
+package com.tienda.facil.core.dto.request;
 
-import com.tienda.facil.core.utils.enums.EstadoPedido;
-import com.tienda.facil.core.utils.enums.MetodoPago;
+import com.tienda.facil.core.util.enums.EstadoPedido;
+import com.tienda.facil.core.util.enums.MetodoPago;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

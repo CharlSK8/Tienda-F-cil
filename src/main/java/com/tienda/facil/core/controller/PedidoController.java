@@ -1,7 +1,7 @@
 package com.tienda.facil.core.controller;
 
-import com.tienda.facil.core.dto.PedidoDto;
-import com.tienda.facil.core.dto.ResponseDTO;
+import com.tienda.facil.core.dto.request.PedidoDto;
+import com.tienda.facil.core.dto.response.ResponseDTO;
 import com.tienda.facil.core.service.PedidoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/tienda/facil/api/v1/pedidos")
-@Tag(name = "PedidoController", description = "Gestión de pedidos")
+@Tag(name = "Pedidos", description = "Gestión de pedidos")
 public class PedidoController {
 
     private final PedidoService pedidoService;

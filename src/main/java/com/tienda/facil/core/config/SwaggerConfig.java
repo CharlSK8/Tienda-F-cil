@@ -24,6 +24,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
         in = SecuritySchemeIn.HEADER
 )
 @EnableSwagger2
-public class SwaggerConfig {
+public class    SwaggerConfig {
 
 }

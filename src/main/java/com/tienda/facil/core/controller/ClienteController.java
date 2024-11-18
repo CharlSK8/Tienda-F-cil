@@ -1,40 +1,46 @@
 package com.tienda.facil.core.controller;
 
-import com.tienda.facil.core.service.ReportService;
-import com.tienda.facil.core.model.ClienteModel;
+import com.tienda.facil.core.dto.request.ActualizarClienteRequestDTO;
+import com.tienda.facil.core.dto.response.ResponseDTO;
+import com.tienda.facil.core.model.Cliente;
 import com.tienda.facil.core.repository.ClienteRepository;
-import com.tienda.facil.core.utils.enums.EstadoActivo;
+import com.tienda.facil.core.service.IClienteService;
+import com.tienda.facil.core.util.constants.Constants;
+import com.tienda.facil.core.util.enums.EstadoActivo;
+import com.tienda.facil.core.util.result.Result;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/clientes")
+@RequiredArgsConstructor
+@CrossOrigin("*")
+@Tag(name = "Clientes", description = "Endpoints para la gestión de clientes")
+@RequestMapping("/tienda/facil/api/v1/clientes")
 public class ClienteController {
+
     private static final Logger logger = LoggerFactory.getLogger(ClienteController.class);
-    private final ReportService reportService;
     private final ClienteRepository clienteRepository;
+    private final IClienteService clienteService;
 
-    public ClienteController(ReportService reportService, ClienteRepository clienteRepository) {
-        this.reportService = reportService;
-        this.clienteRepository = clienteRepository;
-    }
-
+    @Operation(summary = "Reporte clientes activos", description = "Genera un reporte PDF de todos los clientes los cuales se encuentran en estado ACTIVO.")
     @GetMapping("/reporte-activos")
     public ResponseEntity<byte[]> generateActiveClientsReport() {
         logger.info("Iniciando generación de reporte de clientes activos");
 
         // Obtener clientes activos
-        List<ClienteModel> activeClients = clienteRepository.findByActivo(EstadoActivo.ACTIVO);
+        List<Cliente> activeClients = clienteRepository.findByActivo(EstadoActivo.ACTIVO);
 
         if (activeClients.isEmpty()) {
             logger.warn("No se encontraron clientes activos para generar el reporte");
@@ -48,7 +54,7 @@ public class ClienteController {
             logger.debug("Generando reporte para {} clientes activos", activeClients.size());
 
             // Generar el reporte
-            byte[] reportBytes = reportService.exportClientReport(
+            byte[] reportBytes = clienteService.exportClientReport(
                     activeClients,
                     "reports/clientesActivos.jrxml"
             );
@@ -69,6 +75,41 @@ public class ClienteController {
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "Error al generar el reporte: " + e.getMessage()
             );
+        }
+    }
+
+    /**
+     * Actualiza los datos de un cliente existente en el sistema.
+     *
+     * Este método permite actualizar los campos de un cliente, como nombre, apellido, email,
+     * contacto, entre otros. Solo los campos proporcionados en el DTO serán actualizados.
+     * Se utiliza JWT para la autenticación y autorización del usuario que realiza la solicitud.
+     *
+     * @param actualizarClienteRequestDTO El DTO que contiene los nuevos datos del cliente.
+     * @param id El ID único del cliente que se desea actualizar.
+     * @return Un objeto ResponseEntity que contiene la respuesta del servicio, incluyendo un
+     *         objeto ResponseDTO con el resultado de la operación.
+     */
+    @Operation(summary = "Actualizar cliente", description = "Actualiza los datos del cliente, incluyendo nombre, contacto, email, etc.")
+    @PostMapping("/actualizar/{id}")
+    public ResponseEntity<ResponseDTO> actualizarCliente(
+            @Valid @RequestBody ActualizarClienteRequestDTO actualizarClienteRequestDTO, @PathVariable Long id){
+        try{
+            Result<String, String> result = clienteService.actualizarCliente(actualizarClienteRequestDTO, id);
+            return result.isSuccess()
+                    ? ResponseEntity.status(HttpStatus.OK).body(ResponseDTO.builder()
+                    .message(Constants.MESSAGE_OK)
+                    .code(HttpStatus.OK.value()).response(result.getValue()).build())
+                    : ResponseEntity.status(result.getStatusCode())
+                    .body(ResponseDTO.<String>builder()
+                            .message(Constants.MESSAGE_ERROR)
+                            .code(result.getStatusCode()).response(String.join("\n", result.getErrors())).build());
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDTO.builder()
+                    .message(Constants.MESSAGE_ERROR)
+                    .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                    .response(e.getMessage())
+                    .build());
         }
     }
 }

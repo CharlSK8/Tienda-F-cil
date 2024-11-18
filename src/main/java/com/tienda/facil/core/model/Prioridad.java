@@ -1,6 +1,6 @@
 package com.tienda.facil.core.model;
 
-import com.tienda.facil.core.utils.enums.PrioridadPedido;
+import com.tienda.facil.core.util.enums.PrioridadPedido;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "prioridad")  // Nombre de la tabla
-public class PrioridadModel {
+public class Prioridad {
 
     /**
      * Identificador único de la prioridad.
@@ -33,5 +33,5 @@ public class PrioridadModel {
      * Representa los pedidos asociados a esta prioridad.
      */
     @OneToMany(mappedBy = "prioridad", cascade = CascadeType.ALL)
-    private List<PedidoModel> pedidos;
+    private List<Pedido> pedidos;
 }

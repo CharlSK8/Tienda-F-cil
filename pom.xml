@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.tienda.facil</groupId>
 	<artifactId>core</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>core</name>
 	<description>Sistema para gestionar clientes y pedidos de manera eficiente. Permite registrar clientes, realizar un seguimiento de pedidos y optimizar las operaciones de la tienda.</description>
 	<url/>
@@ -97,6 +97,27 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 			<version>3.3.5</version>
+		</dependency>
+		<!--Security-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<version>3.3.5</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.12.6</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.12.6</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.12.6</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
