@@ -42,13 +42,14 @@ public class Cliente {
     private Set<Role> roles;
 
     @Enumerated(EnumType.STRING)
-    private EstadoActivo activo = EstadoActivo.ACTIVO;
+    private EstadoActivo activo;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Pedido> pedidos;
 
     @PrePersist
     protected void onCreate() {
+        activo = EstadoActivo.ACTIVO;
         fechaRegistro = LocalDateTime.now();
         roles = Set.of(Role.USER);
     }
