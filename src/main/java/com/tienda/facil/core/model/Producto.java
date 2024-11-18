@@ -29,4 +29,7 @@ public class Producto {
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
     private CategoriaProducto categoriaProducto;
+
+    @Column(nullable = false)
+    private boolean activo = true; // eliminación lógica
 }
