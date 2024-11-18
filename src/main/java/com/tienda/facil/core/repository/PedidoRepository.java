@@ -28,4 +28,6 @@ public interface PedidoRepository extends JpaRepository<PedidoModel, Long> {
      * @return un Optional que contiene el PedidoModel si se encuentra, o vacío si no
      */
     Optional<PedidoModel> findFirstByClienteAndPrioridad(ClienteModel cliente, PrioridadModel prioridad);
+
+    Optional<PedidoModel> findByNumeroSeguimiento(String numeroSeguimiento);
 }

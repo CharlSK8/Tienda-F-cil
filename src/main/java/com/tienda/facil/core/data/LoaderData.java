@@ -3,6 +3,7 @@ package com.tienda.facil.core.data;
 import com.tienda.facil.core.model.ClienteModel;
 import com.tienda.facil.core.model.PedidoModel;
 import com.tienda.facil.core.model.PrioridadModel;
+import com.tienda.facil.core.model.producto.ProductoModel;
 import com.tienda.facil.core.repository.ClienteRepository;
 import com.tienda.facil.core.repository.PedidoRepository;
 import com.tienda.facil.core.repository.PrioridadRepository;

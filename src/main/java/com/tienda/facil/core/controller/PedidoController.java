@@ -52,7 +52,18 @@ public class PedidoController {
     @PostMapping
     public ResponseEntity<ResponseDTO> crearPedido(@Valid @RequestBody PedidoDto pedidoDto, BindingResult bindingResult) {
         // Llamar al servicio para crear el pedido y obtener el ResponseDTO
-        ResponseDTO response = pedidoService.crearPedido(pedidoDto, bindingResult);
+        ResponseDTO<Object> response = pedidoService.crearPedido(pedidoDto, bindingResult);
+
+        // Devolver la respuesta del servicio
+        return ResponseEntity.status(response.getCode()).body(response);
+    }
+
+    // TODO: Implementar una funcion que busque un pedido a partir de su Numero de Pedido
+
+    @PostMapping
+    public ResponseEntity<ResponseDTO> buscarPedidoPorNumero(@Valid @RequestBody PedidoDto pedidoDto, BindingResult bindingResult) {
+        // Llamar al servicio para buscar el pedido y obtener el ResponseDTO
+        ResponseDTO<Object> response = pedidoService.buscarPedidoPorNumero(pedidoDto, bindingResult);
 
         // Devolver la respuesta del servicio
         return ResponseEntity.status(response.getCode()).body(response);
