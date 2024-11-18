@@ -6,6 +6,7 @@ import com.tienda.facil.core.model.Prioridad;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
+import java.util.List;
 
 /**
  * Repositorio para la entidad Pedido.
@@ -41,4 +42,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
      * @return un Optional que contiene el Pedido si se encuentra, o vacío si no
      */
     Optional<Pedido> findByIdAndActivoTrue(Long id);
+
+    List<Pedido> findAllByActivoTrue();
 }

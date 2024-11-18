@@ -180,10 +180,9 @@ public class PedidoService {
      * @return {@link ResponseDTO} con la lista de pedidos obtenidos.
      */
     public ResponseDTO<Object> obtenerPedidos() {
-        List<PedidoDto> pedidos = pedidoRepository.findAll()
+        List<PedidoDto> pedidos = pedidoRepository.findAllByActivoTrue()
                 .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.<PedidoDto>toList());
+                .map(this::convertToDto).toList();
 
         return ResponseDTO.builder()
                 .response(pedidos)
