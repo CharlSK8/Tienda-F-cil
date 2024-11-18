@@ -16,7 +16,7 @@ public class DetallePedidoModel {
 
     @ManyToOne
     @JoinColumn(name = "pedido_id")
-    private PedidoModel pedido;
+    private Pedido pedido;
 
     @ManyToOne
     @JoinColumn(name = "producto_id")

@@ -1,7 +1,7 @@
 package com.tienda.facil.core.service.producto;
 
-import com.tienda.facil.core.dto.ResponseDTO;
-import com.tienda.facil.core.dto.producto.CategoriaProductoDto;
+import com.tienda.facil.core.dto.response.ResponseDTO;
+import com.tienda.facil.core.dto.request.producto.CategoriaProductoDto;
 import com.tienda.facil.core.model.producto.CategoriaProductoModel;
 import com.tienda.facil.core.repository.producto.CategoriaProductoRepository;
 import jakarta.validation.Valid;
@@ -33,7 +33,7 @@ public class CategoriaProductoService {
      * @param categoriaProductoDto Datos de la categoría a crear.
      * @return Un {@link ResponseDTO} con la categoría creada o un mensaje de error.
      */
-    public ResponseDTO crearCategoria(CategoriaProductoDto categoriaProductoDto) {
+    public ResponseDTO<Object> crearCategoria(CategoriaProductoDto categoriaProductoDto) {
         try {
             // Convierte el DTO al modelo de entidad
             CategoriaProductoModel categoriaModel = getCategoriaModelFromDto(categoriaProductoDto);
@@ -72,7 +72,7 @@ public class CategoriaProductoService {
      * @param categoriaProductoDto Los nuevos datos para la categoría.
      * @return Un {@link ResponseDTO} con la categoría actualizada o un mensaje de error.
      */
-    public ResponseDTO actualizarCategoria(Long id, @Valid CategoriaProductoDto categoriaProductoDto) {
+    public ResponseDTO<Object> actualizarCategoria(Long id, @Valid CategoriaProductoDto categoriaProductoDto) {
         try {
             // Busca la categoría a actualizar
             CategoriaProductoModel categoriaModel = categoriaProductoRepository.findById(id).orElseThrow(() -> new Exception("Categoría no encontrada"));
@@ -98,7 +98,7 @@ public class CategoriaProductoService {
      *
      * @return Un {@link ResponseDTO} con la lista de categorías obtenidas.
      */
-    public ResponseDTO obtenerCategorias() {
+    public ResponseDTO<Object> obtenerCategorias() {
         try {
             // Obtiene todas las categorías de la base de datos
             Iterable<CategoriaProductoModel> categorias = categoriaProductoRepository.findAll();
@@ -116,7 +116,7 @@ public class CategoriaProductoService {
      * @param id El ID de la categoría a eliminar.
      * @return Un {@link ResponseDTO} que indica si la eliminación fue exitosa o si ocurrió un error.
      */
-    public ResponseDTO eliminarCategoria(Long id) {
+    public ResponseDTO<Object> eliminarCategoria(Long id) {
         try {
             // Busca la categoría a eliminar
             CategoriaProductoModel categoriaModel = categoriaProductoRepository.findById(id).orElseThrow(() -> new Exception("Categoría no encontrada"));

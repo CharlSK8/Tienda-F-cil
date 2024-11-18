@@ -1,6 +1,6 @@
 package com.tienda.facil.core.exception;
 
-import com.tienda.facil.core.dto.ResponseDTO;
+import com.tienda.facil.core.dto.response.ResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;

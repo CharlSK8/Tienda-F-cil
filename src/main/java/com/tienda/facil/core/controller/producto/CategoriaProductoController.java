@@ -1,7 +1,7 @@
 package com.tienda.facil.core.controller.producto;
 
-import com.tienda.facil.core.dto.producto.CategoriaProductoDto;
-import com.tienda.facil.core.dto.ResponseDTO;
+import com.tienda.facil.core.dto.request.producto.CategoriaProductoDto;
+import com.tienda.facil.core.dto.response.ResponseDTO;
 import com.tienda.facil.core.service.producto.CategoriaProductoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

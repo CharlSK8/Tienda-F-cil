@@ -1,7 +1,7 @@
 package com.tienda.facil.core.model.producto;
 
-import com.tienda.facil.core.utils.enums.CategoriaProducto;
-import com.tienda.facil.core.utils.enums.EstadoCategoria;
+import com.tienda.facil.core.util.enums.CategoriaProducto;
+import com.tienda.facil.core.util.enums.EstadoCategoria;
 import jakarta.persistence.*;
 import lombok.Data;
 

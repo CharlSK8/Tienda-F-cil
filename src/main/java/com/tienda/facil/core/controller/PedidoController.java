@@ -58,16 +58,18 @@ public class PedidoController {
         return ResponseEntity.status(response.getCode()).body(response);
     }
 
-    // TODO: Implementar una funcion que busque un pedido a partir de su Numero de Pedido
-
-    @PostMapping
-    public ResponseEntity<ResponseDTO> buscarPedidoPorNumero(@Valid @RequestBody PedidoDto pedidoDto, BindingResult bindingResult) {
-        // Llamar al servicio para buscar el pedido y obtener el ResponseDTO
+    @Operation(summary = "Buscar Pedido por Número", description = "Busca un pedido en la base de datos utilizando su número")
+    @ApiResponse(responseCode = "200", description = "Pedido encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDTO.class)))
+    @ApiResponse(responseCode = "404", description = "Pedido no encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDTO.class)))
+    @PostMapping("/buscar")
+    public ResponseEntity<ResponseDTO> buscarPedidoPorNumero(
+            @Valid @RequestBody PedidoDto pedidoDto,
+            BindingResult bindingResult) {
         ResponseDTO<Object> response = pedidoService.buscarPedidoPorNumero(pedidoDto, bindingResult);
-
-        // Devolver la respuesta del servicio
         return ResponseEntity.status(response.getCode()).body(response);
     }
+
 
     /**
      * Endpoint para obtener todos los pedidos.
@@ -85,7 +87,7 @@ public class PedidoController {
     })
     @GetMapping
     public ResponseEntity<ResponseDTO> obtenerPedidos() {
-        ResponseDTO response = pedidoService.obtenerPedidos();
+        ResponseDTO<Object> response = pedidoService.obtenerPedidos();
         return ResponseEntity.status(response.getCode()).body(response);
     }
 
@@ -106,28 +108,28 @@ public class PedidoController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDTO> obtenerPedidoById(@PathVariable Long id) {
-        ResponseDTO response = pedidoService.obtenerPedido(id);
+        ResponseDTO<Object> response = pedidoService.obtenerPedido(id);
         return ResponseEntity.status(response.getCode()).body(response);
     }
 
     /**
-     * Endpoint para eliminar un pedido por su ID.
+     * Endpoint para eliminar un pedido por su ID (eliminado lógico).
      *
      * @param id El ID del pedido a eliminar.
      * @return {@link ResponseEntity} con un {@link ResponseDTO} que indica el éxito o error de la operación.
      */
-    @Operation(summary = "Eliminar Pedido", description = "Elimina un pedido de la base de datos por su ID")
+    @Operation(summary = "Eliminar Pedido", description = "Marca un pedido como inactivo en lugar de eliminarlo físicamente")
     @io.swagger.v3.oas.annotations.responses.ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Eliminar pedido exitosamente",
+            @ApiResponse(responseCode = "200", description = "Pedido eliminado lógicamente exitosamente",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Solicitud inválida",
+            @ApiResponse(responseCode = "404", description = "Pedido no encontrado",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDTO.class))),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseDTO.class)))
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDTO> eliminarPedido(@PathVariable Long id) {
-        ResponseDTO response = pedidoService.eliminarPedido(id);
+        ResponseDTO<Object> response = pedidoService.eliminarPedido(id); // Cambia el estado a inactivo
         return ResponseEntity.status(response.getCode()).body(response);
     }
 
@@ -153,7 +155,7 @@ public class PedidoController {
             @PathVariable Long id,
             @Valid @RequestBody PedidoDto pedidoDto,
             BindingResult bindingResult) {
-        ResponseDTO response = pedidoService.actualizarPedido(id, pedidoDto, bindingResult);
+        ResponseDTO<Object> response = pedidoService.actualizarPedido(id, pedidoDto, bindingResult);
         return ResponseEntity.status(response.getCode()).body(response);
     }
 }

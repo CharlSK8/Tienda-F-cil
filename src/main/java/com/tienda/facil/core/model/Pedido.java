@@ -96,4 +96,11 @@ public class Pedido {
      */
     @Column(name = "numero_seguimiento")
     private String numeroSeguimiento;
+
+    /**
+     * Estado de activación del pedido (para eliminación lógica).
+     * True significa que el pedido está activo, false indica que está eliminado.
+     */
+    @Column(name = "activo", nullable = false)
+    private boolean activo = true; // Valor predeterminado para nuevos pedidos
 }

@@ -1,7 +1,7 @@
 package com.tienda.facil.core.repository.producto;
 
 import com.tienda.facil.core.model.producto.CategoriaProductoModel;
-import com.tienda.facil.core.utils.enums.EstadoCategoria;
+import com.tienda.facil.core.util.enums.EstadoCategoria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.tienda.facil.core.dto.producto;
+package com.tienda.facil.core.dto.request.producto;
 
 import lombok.Data;
 
