@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/tienda/facil/api/v1/auth/**","/docs/**" ,"/swagger-ui.html", "/docs/swagger-ui/**", "/v3/api-docs/**", "/actuator/health").permitAll()
                         .requestMatchers("/tienda/facil/api/v1/test").hasRole("USER")
-                        .requestMatchers("/tienda/facil/api/v1/clientes/reporte-activos").hasRole("ADMIN")
+                        .requestMatchers("/tienda/facil/api/v1/clientes/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
