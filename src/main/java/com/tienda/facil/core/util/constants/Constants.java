@@ -15,6 +15,7 @@ public final class Constants {
     public static final String PEDIDO_NO_ENCONTRADO = "Pedido no encontrado";
     public static final String PEDIDOS_OBTENIDOS = "Pedidos obtenidos exitosamente";
     public static final String PRODUCTO_ELIMINADO_O_ELIMINADO = "Producto no encontrado o ya eliminado";
+    public static final String PRODUCTO_NO_ENCONTRADO = "Producto no encontrado";
 
     private Constants() {
         throw new IllegalStateException("Constants class");

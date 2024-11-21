@@ -7,6 +7,7 @@ import com.tienda.facil.core.model.Producto;
 import com.tienda.facil.core.repository.producto.CategoriaProductoRepository;
 import com.tienda.facil.core.repository.producto.ProductoRepository;
 import com.tienda.facil.core.util.constants.Constants;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,9 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Servicio para gestionar los productos.
+ */
 @Service
 @AllArgsConstructor
 public class ProductoService {
@@ -24,9 +27,18 @@ public class ProductoService {
     private final ProductoRepository productoRepository;
     private final CategoriaProductoRepository categoriaProductoRepository;
 
+    /**
+     * Crea un nuevo producto en la base de datos.
+     *
+     * @param productoDto DTO con la información del producto.
+     * @param bindingResult Resultado de la validación de la solicitud.
+     * @return ResponseDTO con el resultado de la operación.
+     */
+    @Transactional
     public ResponseDTO<Object> crearProducto(@Valid ProductoDto productoDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldErrors().stream()
+            String errorMessage = bindingResult.getFieldErrors()
+                    .stream()
                     .map(error -> error.getField() + ": " + error.getDefaultMessage())
                     .collect(Collectors.joining(", "));
             return ResponseDTO.builder()
@@ -58,9 +70,19 @@ public class ProductoService {
         }
     }
 
+    /**
+     * Actualiza los datos de un producto existente.
+     *
+     * @param id ID del producto a actualizar.
+     * @param productoDto DTO con la nueva información del producto.
+     * @param bindingResult Resultado de la validación de la solicitud.
+     * @return ResponseDTO con el resultado de la operación.
+     */
+    @Transactional
     public ResponseDTO<Object> actualizarProducto(Long id, @Valid ProductoDto productoDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldErrors().stream()
+            String errorMessage = bindingResult.getFieldErrors()
+                    .stream()
                     .map(error -> error.getField() + ": " + error.getDefaultMessage())
                     .collect(Collectors.joining(", "));
             return ResponseDTO.builder()
@@ -69,10 +91,9 @@ public class ProductoService {
                     .build();
         }
 
-        Optional<Producto> productoOpt = productoRepository.findByIdAndActivoTrue(id);
-
-        if (productoOpt.isPresent()) {
-            Producto producto = productoOpt.get();
+        try {
+            Producto producto = productoRepository.findByIdAndActivoTrue(id)
+                    .orElseThrow(() -> new IllegalArgumentException(Constants.PRODUCTO_NO_ENCONTRADO));
 
             CategoriaProducto categoria = categoriaProductoRepository.findById(productoDto.getCategoriaId())
                     .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
@@ -90,14 +111,20 @@ public class ProductoService {
                     .code(HttpStatus.OK.value())
                     .message("Producto actualizado exitosamente")
                     .build();
-        } else {
+
+        } catch (Exception e) {
             return ResponseDTO.builder()
-                    .message(Constants.PRODUCTO_ELIMINADO_O_ELIMINADO)
-                    .code(HttpStatus.NOT_FOUND.value())
+                    .message("Error inesperado: " + e.getMessage())
+                    .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
                     .build();
         }
     }
 
+    /**
+     * Obtiene una lista de todos los productos activos.
+     *
+     * @return ResponseDTO con la lista de productos activos.
+     */
     public ResponseDTO<Object> obtenerTodosLosProductos() {
         List<Producto> productos = productoRepository.findByActivoTrue();
 
@@ -108,43 +135,33 @@ public class ProductoService {
                 .build();
     }
 
-    public ResponseDTO<Object> obtenerProductoPorId(Long id) {
-        Optional<Producto> productoOpt = productoRepository.findByIdAndActivoTrue(id);
-
-        if (productoOpt.isPresent()) {
-            return ResponseDTO.builder()
-                    .response(productoOpt.get())
-                    .code(HttpStatus.OK.value())
-                    .message("Producto encontrado exitosamente")
-                    .build();
-        } else {
-            return ResponseDTO.builder()
-                    .message(Constants.PRODUCTO_ELIMINADO_O_ELIMINADO)
-                    .code(HttpStatus.NOT_FOUND.value())
-                    .build();
-        }
-    }
-
+    /**
+     * Marca un producto como inactivo en lugar de eliminarlo físicamente.
+     *
+     * @param id ID del producto a eliminar.
+     * @return ResponseDTO con el resultado de la operación.
+     */
+    @Transactional
     public ResponseDTO<Object> eliminarProductoLogico(Long id) {
-        Optional<Producto> productoOpt = productoRepository.findByIdAndActivoTrue(id);
+        Producto producto = productoRepository.findByIdAndActivoTrue(id)
+                .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
 
-        if (productoOpt.isPresent()) {
-            Producto producto = productoOpt.get();
-            producto.setActivo(false);
-            productoRepository.save(producto);
+        producto.setActivo(false);
+        productoRepository.save(producto);
 
-            return ResponseDTO.builder()
-                    .message("Producto eliminado lógicamente")
-                    .code(HttpStatus.OK.value())
-                    .build();
-        } else {
-            return ResponseDTO.builder()
-                    .message(Constants.PRODUCTO_ELIMINADO_O_ELIMINADO)
-                    .code(HttpStatus.NOT_FOUND.value())
-                    .build();
-        }
+        return ResponseDTO.builder()
+                .message("Producto eliminado lógicamente")
+                .code(HttpStatus.OK.value())
+                .build();
     }
 
+    /**
+     * Convierte un ProductoDto a una entidad Producto.
+     *
+     * @param productoDto DTO con la información del producto.
+     * @param categoria Categoría del producto.
+     * @return Producto convertido.
+     */
     private Producto convertToEntity(ProductoDto productoDto, CategoriaProducto categoria) {
         Producto producto = new Producto();
         producto.setNombre(productoDto.getNombre());
@@ -153,5 +170,32 @@ public class ProductoService {
         producto.setStock(productoDto.getStock());
         producto.setCategoriaProducto(categoria);
         return producto;
+    }
+
+    /**
+     * Activa un producto que fue eliminado lógicamente.
+     *
+     * @param id ID del producto a activar.
+     * @return ResponseDTO con el resultado de la operación.
+     */
+    @Transactional
+    public ResponseDTO<Object> activarProducto(Long id) {
+        Producto producto = productoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+
+        if (producto.isActivo()) {
+            return ResponseDTO.builder()
+                    .message("El producto ya está activo")
+                    .code(HttpStatus.BAD_REQUEST.value())
+                    .build();
+        }
+
+        producto.setActivo(true);
+        productoRepository.save(producto);
+
+        return ResponseDTO.builder()
+                .message("Producto activado exitosamente")
+                .code(HttpStatus.OK.value())
+                .build();
     }
 }
