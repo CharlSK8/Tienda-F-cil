@@ -40,7 +40,7 @@ public class PedidoService {
      * @param bindingResult Resultado de la validación del {@link PedidoDto}.
      * @return {@link ResponseDTO} con el pedido creado o un mensaje de error.
      */
-    public ResponseDTO crearPedido(@Valid PedidoDto pedidoDto, BindingResult bindingResult) {
+    public ResponseDTO<Object>  crearPedido(@Valid PedidoDto pedidoDto, BindingResult bindingResult) {
         // Validar datos del DTO
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldErrors().stream()
@@ -121,7 +121,7 @@ public class PedidoService {
      * @param bindingResult Resultado de la validación del {@link PedidoDto}.
      * @return {@link ResponseDTO} que contiene el pedido actualizado o un mensaje de error.
      */
-    public ResponseDTO actualizarPedido(Long id, @Valid PedidoDto pedidoDto, BindingResult bindingResult) {
+    public ResponseDTO<Object> actualizarPedido(Long id, @Valid PedidoDto pedidoDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldErrors().stream()
                     .map(error -> error.getField() + ": " + error.getDefaultMessage())
@@ -179,11 +179,10 @@ public class PedidoService {
      *
      * @return {@link ResponseDTO} con la lista de pedidos obtenidos.
      */
-    public ResponseDTO obtenerPedidos() {
-        List<PedidoDto> pedidos = pedidoRepository.findAll()
+    public ResponseDTO<Object> obtenerPedidos() {
+        List<PedidoDto> pedidos = pedidoRepository.findAllByActivoTrue()
                 .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.<PedidoDto>toList());
+                .map(this::convertToDto).toList();
 
         return ResponseDTO.builder()
                 .response(pedidos)
@@ -198,7 +197,7 @@ public class PedidoService {
      * @param id El ID del pedido a obtener.
      * @return {@link ResponseDTO} con el pedido obtenido o un mensaje de error.
      */
-    public ResponseDTO obtenerPedido(Long id) {
+    public ResponseDTO<Object> obtenerPedido(Long id) {
         Optional<Pedido> pedidoOpt = pedidoRepository.findById(id);
 
         if (pedidoOpt.isPresent()) {
@@ -237,24 +236,72 @@ public class PedidoService {
     }
 
     /**
-     * Elimina un pedido de la base de datos por su ID.
+     * Marca un pedido como inactivo (eliminado lógicamente).
      *
-     * @param id El ID del pedido a eliminar.
-     * @return {@link ResponseDTO} que indica si la eliminación fue exitosa o si ocurrió un error.
+     * @param id El ID del pedido a marcar como inactivo.
+     * @return {@link ResponseDTO} que indica el éxito o error de la operación.
      */
-    public ResponseDTO eliminarPedido(Long id) {
-        Optional<Pedido> pedidoOpt = pedidoRepository.findById(id);
+    public ResponseDTO<Object> eliminarPedido(Long id) {
+        Optional<Pedido> pedidoOpt = pedidoRepository.findByIdAndActivoTrue(id);
 
         if (pedidoOpt.isPresent()) {
-            pedidoRepository.deleteById(id);
+            Pedido pedido = pedidoOpt.get();
+            pedido.setActivo(false); // Cambio al estado inactivo
+            pedido.setFechaModificacion(new Date());
+            pedidoRepository.save(pedido);
+
             return ResponseDTO.builder()
-                    .message("Pedido eliminado exitosamente")
+                    .message("Pedido eliminado lógicamente")
                     .code(HttpStatus.OK.value())
                     .build();
         } else {
             return ResponseDTO.builder()
-                    .message("Pedido no encontrado")
+                    .message("Pedido no encontrado o ya eliminado")
                     .code(HttpStatus.NOT_FOUND.value())
+                    .build();
+        }
+    }
+
+    /**
+     * Busca un pedido por su número de seguimiento.
+     *
+     * @param pedidoDto     El objeto {@link PedidoDto} que contiene el número de seguimiento.
+     * @param bindingResult Resultado de la validación del {@link PedidoDto}.
+     * @return {@link ResponseDTO} con el pedido encontrado o un mensaje de error.
+     */
+    public ResponseDTO<Object> buscarPedidoPorNumero(@Valid PedidoDto pedidoDto, BindingResult bindingResult) {
+        // Validar datos del DTO
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+            return ResponseDTO.builder()
+                    .response(errorMessage)
+                    .code(HttpStatus.BAD_REQUEST.value())
+                    .build();
+        }
+
+        try {
+            // Buscar el pedido por número de seguimiento
+            Optional<Pedido> pedidoOpt = pedidoRepository.findByNumeroSeguimiento(pedidoDto.getNumeroSeguimiento());
+
+            if (pedidoOpt.isPresent()) {
+                PedidoDto pedidoDtoRespuesta = convertToDto(pedidoOpt.get());
+                return ResponseDTO.builder()
+                        .response(pedidoDtoRespuesta)
+                        .code(HttpStatus.OK.value())
+                        .message("Pedido encontrado exitosamente")
+                        .build();
+            } else {
+                return ResponseDTO.builder()
+                        .message("Pedido no encontrado")
+                        .code(HttpStatus.NOT_FOUND.value())
+                        .build();
+            }
+        } catch (Exception e) {
+            return ResponseDTO.builder()
+                    .message("Error inesperado: " + e.getMessage())
+                    .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
                     .build();
         }
     }

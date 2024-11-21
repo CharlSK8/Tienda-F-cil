@@ -1,13 +1,12 @@
 version: '3.6'
+
 services:
   db:
-    image: mysql
+    image: mysql:8.0.34 # Versión estable de MySQL
     container_name: tienda-facil
     hostname: localhost
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - "3306:3306"

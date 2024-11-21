@@ -2,6 +2,7 @@ package com.tienda.facil.core.util.constants;
 
 /**
  * Esta clase permite definir todas aquellas constantes que se requieran en la lógica
+ *
  * @author HcharlinsonPerez
  */
 public final class Constants {
@@ -13,6 +14,8 @@ public final class Constants {
 
     public static final String PEDIDO_NO_ENCONTRADO = "Pedido no encontrado";
     public static final String PEDIDOS_OBTENIDOS = "Pedidos obtenidos exitosamente";
+    public static final String PRODUCTO_ELIMINADO_O_ELIMINADO = "Producto no encontrado o ya eliminado";
+    public static final String PRODUCTO_NO_ENCONTRADO = "Producto no encontrado";
 
     private Constants() {
         throw new IllegalStateException("Constants class");
